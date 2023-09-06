@@ -4,6 +4,9 @@ const app = express();
 const PORT = 8000;
 require("dotenv").config();
 
+app.use(express.json());
+app.use("/api/v1", require("./src/v1/routes/auth"));
+
 // DB接続
 try {
   mongoose.connect(process.env.MONGODB_URL);
@@ -11,10 +14,6 @@ try {
 } catch (error) {
   console.log(error);
 }
-
-// ユーザー新規登録API
-
-// ユーザーログイン用API
 
 app.listen(PORT, () => {
   console.log("ローカルサーバー起動中...");
