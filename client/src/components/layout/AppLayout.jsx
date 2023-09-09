@@ -4,9 +4,12 @@ import { Outlet, useNavigate } from "react-router-dom";
 import authUtils from "../../utils/authUtils";
 import notionLogo from "../../assets/images/notion-logo.png";
 import Sidebar from "../common/Sidebar";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/features/userSlice";
 
 const AppLayout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // JWTを持っているのか確認する
@@ -16,6 +19,9 @@ const AppLayout = () => {
       if (!user) {
         // userが存在しなければログインにリダイレクト
         navigate("/login");
+      } else {
+        // ユーザーを保存する
+        dispatch(setUser(user));
       }
     };
     checkAuth();

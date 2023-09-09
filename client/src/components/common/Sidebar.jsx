@@ -10,10 +10,12 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import React from "react";
 import assets from "../../assets/index";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user.value);
 
   // ログアウトボタンが押されたら、ローカルストレージからJWTを削除しログインページにリダイレクトする
   const logout = () => {
@@ -30,7 +32,7 @@ const Sidebar = () => {
     >
       <List
         sx={{
-          width: 250,
+          width: 200,
           height: "100vh",
           backgroundColor: assets.colors.secondary,
         }}
@@ -45,7 +47,7 @@ const Sidebar = () => {
             }}
           >
             <Typography variant="body2" fontWeight="700">
-              Oryuta
+              {user.username}
             </Typography>
             <IconButton onClick={logout}>
               <LogoutOutlinedIcon />
@@ -69,6 +71,27 @@ const Sidebar = () => {
               <AddBoxOutlinedIcon fontSize="small" />
             </IconButton>
           </Box>
+        </ListItemButton>
+        <ListItemButton
+          sx={{ pl: "20px" }}
+          component={Link}
+          to="/task/2444325kjlajsdf"
+        >
+          <Typography>🥕買い物リスト(仮)</Typography>
+        </ListItemButton>
+        <ListItemButton
+          sx={{ pl: "20px" }}
+          component={Link}
+          to="/task/2444325kjlajsdf"
+        >
+          <Typography>🥕買い物リスト(仮)</Typography>
+        </ListItemButton>
+        <ListItemButton
+          sx={{ pl: "20px" }}
+          component={Link}
+          to="/task/2444325kjlajsdf"
+        >
+          <Typography>🥕買い物リスト(仮)</Typography>
         </ListItemButton>
       </List>
     </Drawer>
