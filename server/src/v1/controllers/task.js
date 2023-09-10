@@ -23,3 +23,14 @@ exports.getAll = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+exports.getOne = async (req, res) => {
+  const { taskId } = req.params;
+  try {
+    const task = Task.findOne({ user: req.user._id, _id: taskId });
+    if (!task) return res.status(404).json("タスクが存在しません");
+    res.status(200).json(task);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
