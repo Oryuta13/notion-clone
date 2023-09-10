@@ -8,15 +8,20 @@ import {
 import { Box } from "@mui/system";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import assets from "../../assets/index";
-import { useNavigate, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import taskApi from "../../api/taskApi";
+import { setTask } from "../../redux/features/taskSlice";
 
 const Sidebar = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { taskId } = useParams();
   const user = useSelector((state) => state.user.value);
+  const tasks = useSelector((state) => state.task.value);
 
   // ログアウトボタンが押されたら、ローカルストレージからJWTを削除しログインページにリダイレクトする
   const logout = () => {
@@ -28,13 +33,18 @@ const Sidebar = () => {
     const getTasks = async () => {
       try {
         const res = await taskApi.getAll();
-        console.log(res);
+        dispatch(setTask(res));
       } catch (err) {
         alert(err);
       }
     };
     getTasks();
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const activeIndex = tasks.findIndex((e) => e._id === taskId);
+    setActiveIndex(activeIndex);
+  }, [navigate]);
 
   return (
     <Drawer
@@ -85,27 +95,19 @@ const Sidebar = () => {
             </IconButton>
           </Box>
         </ListItemButton>
-        <ListItemButton
-          sx={{ pl: "20px" }}
-          component={Link}
-          to="/task/2444325kjlajsdf"
-        >
-          <Typography>🥕買い物リスト(仮)</Typography>
-        </ListItemButton>
-        <ListItemButton
-          sx={{ pl: "20px" }}
-          component={Link}
-          to="/task/2444325kjlajsdf"
-        >
-          <Typography>🥕買い物リスト(仮)</Typography>
-        </ListItemButton>
-        <ListItemButton
-          sx={{ pl: "20px" }}
-          component={Link}
-          to="/task/2444325kjlajsdf"
-        >
-          <Typography>🥕買い物リスト(仮)</Typography>
-        </ListItemButton>
+        {tasks.map((item, index) => (
+          <ListItemButton
+            sx={{ pl: "20px" }}
+            component={Link}
+            to={`/task/${item._id}`}
+            key={item._id}
+            selected={index === activeIndex}
+          >
+            <Typography>
+              {item.icon} {item.title}
+            </Typography>
+          </ListItemButton>
+        ))}
       </List>
     </Drawer>
   );
