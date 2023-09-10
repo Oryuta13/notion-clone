@@ -8,10 +8,11 @@ import {
 import { Box } from "@mui/system";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import React from "react";
+import React, { useEffect } from "react";
 import assets from "../../assets/index";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import taskApi from "../../api/taskApi";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -22,6 +23,18 @@ const Sidebar = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const res = await taskApi.getAll();
+        console.log(res);
+      } catch (err) {
+        alert(err);
+      }
+    };
+    getTasks();
+  }, []);
 
   return (
     <Drawer

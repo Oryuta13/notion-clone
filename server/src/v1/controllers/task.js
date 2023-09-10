@@ -14,3 +14,12 @@ exports.create = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+exports.getAll = async (req, res) => {
+  try {
+    const tasks = await Task.find({ user: req.user._id }).sort("-position");
+    res.status(200).json(tasks);
+  } catch {
+    res.status(500).json(err);
+  }
+};
