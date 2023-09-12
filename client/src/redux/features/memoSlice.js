@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = { value: [] };
 
-export const taskSlice = createSlice({
-  name: "task",
+export const memoSlice = createSlice({
+  name: "memo",
   initialState,
   reducers: {
-    setTask: (state, action) => {
+    setMemo: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
-export const { setTask } = taskSlice.actions;
-export default taskSlice.reducer;
+export const { setMemo } = memoSlice.actions;
+export default memoSlice.reducer;

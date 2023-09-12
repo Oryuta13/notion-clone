@@ -1,8 +1,8 @@
-// タスクスキーマを構築、モデルの作成
+// メモスキーマを構築、モデルの作成
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const taskSchema = new Schema({
+const memoSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -18,11 +18,11 @@ const taskSchema = new Schema({
   },
   description: {
     type: String,
-    default: "タスクを追加してください",
+    default: "こちらに自由に記入してください。",
   },
   position: {
     type: Number,
   },
 });
 
-module.exports = mongoose.model("Task", taskSchema);
+module.exports = mongoose.model("Memo", memoSchema);

@@ -12,16 +12,16 @@ import React, { useEffect, useState } from "react";
 import assets from "../../assets/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import taskApi from "../../api/taskApi";
-import { setTask } from "../../redux/features/taskSlice";
+import memoApi from "../../api/memoApi";
+import { setMemo } from "../../redux/features/memoSlice";
 
 const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { taskId } = useParams();
+  const { memoId } = useParams();
   const user = useSelector((state) => state.user.value);
-  const tasks = useSelector((state) => state.task.value);
+  const memos = useSelector((state) => state.memo.value);
 
   // ログアウトボタンが押されたら、ローカルストレージからJWTを削除しログインページにリダイレクトする
   const logout = () => {
@@ -30,19 +30,19 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    const getTasks = async () => {
+    const getMemos = async () => {
       try {
-        const res = await taskApi.getAll();
-        dispatch(setTask(res));
+        const res = await memoApi.getAll();
+        dispatch(setMemo(res));
       } catch (err) {
         alert(err);
       }
     };
-    getTasks();
+    getMemos();
   }, [dispatch]);
 
   useEffect(() => {
-    const activeIndex = tasks.findIndex((e) => e._id === taskId);
+    const activeIndex = memos.findIndex((e) => e._id === memoId);
     setActiveIndex(activeIndex);
   }, [navigate]);
 
@@ -55,7 +55,7 @@ const Sidebar = () => {
     >
       <List
         sx={{
-          width: 200,
+          width: 250,
           height: "100vh",
           backgroundColor: assets.colors.secondary,
         }}
@@ -88,18 +88,18 @@ const Sidebar = () => {
             }}
           >
             <Typography variant="body2" fontWeight="700">
-              Todo
+              Memo
             </Typography>
             <IconButton>
               <AddBoxOutlinedIcon fontSize="small" />
             </IconButton>
           </Box>
         </ListItemButton>
-        {tasks.map((item, index) => (
+        {memos.map((item, index) => (
           <ListItemButton
             sx={{ pl: "20px" }}
             component={Link}
-            to={`/task/${item._id}`}
+            to={`/memo/${item._id}`}
             key={item._id}
             selected={index === activeIndex}
           >

@@ -3,18 +3,18 @@ import { Box } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import taskApi from "../api/taskApi";
+import memoApi from "../api/memoApi";
 
 const Home = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const createTask = async () => {
+  const createMemo = async () => {
     try {
       setLoading(true);
-      const res = await taskApi.create();
+      const res = await memoApi.create();
       console.log(res);
-      navigate(`/task/${res._id}`);
+      navigate(`/memo/${res._id}`);
     } catch (err) {
       alert(err);
     } finally {
@@ -33,10 +33,10 @@ const Home = () => {
     >
       <LoadingButton
         variant="outlined"
-        onClick={() => createTask()}
+        onClick={() => createMemo()}
         loading={loading}
       >
-        最初のタスクを作成
+        最初のメモを作成
       </LoadingButton>
     </Box>
   );
