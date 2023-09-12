@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import { IconButton, TextField } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import memoApi from "../api/memoApi";
+import { useDispatch, useSelector } from "react-redux";
+import { setMemo } from "../redux/features/memoSlice";
 
 const Memo = () => {
   // memoIdを取得してくる
   const { memoId } = useParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const memos = useSelector((state) => state.memo.value);
 
   // memoIdが変更されるたびにそのメモを取得する
   useEffect(() => {
@@ -59,6 +64,24 @@ const Memo = () => {
     }, timeout);
   };
 
+  const deleteMemo = async () => {
+    try {
+      const deletedMemo = await memoApi.delete(memoId);
+      console.log(deletedMemo);
+
+      const newMemos = memos.filter((e) => e._id !== memoId);
+      if (newMemos.length === 0) {
+        navigate("/memo");
+      } else {
+        navigate(`/memo/${newMemos[0]._id}`);
+      }
+
+      dispatch(setMemo(newMemos));
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <>
       <Box
@@ -68,7 +91,7 @@ const Memo = () => {
           width: "100%",
         }}
       >
-        <IconButton variant="outlined" color="error">
+        <IconButton variant="outlined" color="error" onClick={deleteMemo}>
           <DeleteOutlinedIcon />
         </IconButton>
       </Box>
