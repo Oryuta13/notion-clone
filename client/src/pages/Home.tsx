@@ -14,6 +14,7 @@ const Home = () => {
       setLoading(true);
       const res = await memoApi.create();
       console.log(res);
+      // @ts-expect-error TS(2339): Property '_id' does not exist on type 'AxiosRespon... Remove this comment to see the full error message
       navigate(`/memo/${res._id}`);
     } catch (err) {
       alert(err);
@@ -23,6 +24,7 @@ const Home = () => {
   };
 
   return (
+    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Box
       sx={{
         height: "100%",
@@ -31,6 +33,7 @@ const Home = () => {
         justifyContent: "center",
       }}
     >
+      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <LoadingButton
         variant="outlined"
         onClick={() => createMemo()}

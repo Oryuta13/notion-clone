@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Picker from "@emoji-mart/react";
 
-const EmojiPicker = (props) => {
+const EmojiPicker = (props: any) => {
   const [selectedEmoji, setSelectedEmoji] = useState();
   const [isShowPicker, setIsShowPicker] = useState(false);
 
@@ -14,11 +14,11 @@ const EmojiPicker = (props) => {
   // クリックされるたびtrueとfalseを切り替える
   const showPicker = () => setIsShowPicker(!isShowPicker);
 
-  const selectEmoji = (e) => {
+  const selectEmoji = (e: any) => {
     const emojiCode = e.unified.split("-");
     console.log(emojiCode);
-    let codesArray = [];
-    emojiCode.forEach((el) => codesArray.push("0x" + el));
+    let codesArray: any = [];
+    emojiCode.forEach((el: any) => codesArray.push("0x" + el));
     const emoji = String.fromCodePoint(...codesArray);
     console.log(emoji);
     // 絵文字を選択したらpickerを閉じる
@@ -27,7 +27,9 @@ const EmojiPicker = (props) => {
   };
 
   return (
+    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Box>
+      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Typography
         variant="h3"
         fontWeight="700"
@@ -37,6 +39,7 @@ const EmojiPicker = (props) => {
         {selectedEmoji}
       </Typography>
       {/* isShowPickerがtrueならブロック要素、falseならnone */}
+      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Box
         sx={{
           display: isShowPicker ? "block" : "none",
@@ -44,6 +47,7 @@ const EmojiPicker = (props) => {
           zIndex: "100",
         }}
       >
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Picker onEmojiSelect={selectEmoji} />
       </Box>
     </Box>

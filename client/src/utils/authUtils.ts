@@ -11,6 +11,7 @@ const authUtils = {
     // JWTが付加されていた場合User情報を返す
     try {
       const res = await authApi.verifyToken();
+      // @ts-expect-error TS(2339): Property 'user' does not exist on type 'AxiosRespo... Remove this comment to see the full error message
       return res.user;
     } catch {
       return false;
