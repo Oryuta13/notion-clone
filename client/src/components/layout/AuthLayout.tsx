@@ -2,6 +2,7 @@ import { Box, Container } from "@mui/material";
 import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import authUtils from "../../utils/authUtils";
+// @ts-expect-error TS(2307): Cannot find module '../../assets/images/notion-log... Remove this comment to see the full error message
 import notionLogo from "../../assets/images/notion-logo.png";
 
 const AuthLayout = () => {
@@ -20,8 +21,11 @@ const AuthLayout = () => {
     checkAuth();
   }, [navigate]);
   return (
+    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <div>
+      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Container component="main" maxWidth="xs">
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Box
           sx={{
             marginTop: 6,
@@ -30,6 +34,7 @@ const AuthLayout = () => {
             flexDirection: "column",
           }}
         >
+          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <img
             src={notionLogo}
             alt=""
@@ -37,6 +42,7 @@ const AuthLayout = () => {
           />
           Notionクローン
         </Box>
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Outlet />
       </Container>
     </div>

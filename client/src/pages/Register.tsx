@@ -12,7 +12,7 @@ const Register = () => {
   const [confirmErrText, setConfirmErrText] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setUsernameErrText("");
     setPasswordErrText("");
@@ -20,8 +20,11 @@ const Register = () => {
 
     // 入力欄の文字列を取得
     const data = new FormData(e.target);
+    // @ts-expect-error TS(2531): Object is possibly 'null'.
     const username = data.get("username").trim();
+    // @ts-expect-error TS(2531): Object is possibly 'null'.
     const password = data.get("password").trim();
+    // @ts-expect-error TS(2531): Object is possibly 'null'.
     const confirmPassword = data.get("confirmPassword").trim();
     console.log(username);
     console.log(password);
@@ -59,13 +62,15 @@ const Register = () => {
         confirmPassword,
       });
       setLoading(false);
+      // @ts-expect-error TS(2339): Property 'token' does not exist on type 'AxiosResp... Remove this comment to see the full error message
       localStorage.setItem("token", res.token);
       console.log("新規登録に成功しました");
       navigate("/");
     } catch (err) {
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       const errors = err.data.errors;
       console.log(errors);
-      errors.forEach((err) => {
+      errors.forEach((err: any) => {
         if (err.path === "username") {
           setUsernameErrText(err.msg);
         }
@@ -81,8 +86,11 @@ const Register = () => {
   };
 
   return (
+    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <>
+      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Box component="form" onSubmit={handleSubmit} noValidate>
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <TextField
           fullWidth
           id="username"
@@ -94,6 +102,7 @@ const Register = () => {
           error={usernameErrText !== ""}
           disabled={loading}
         />
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <TextField
           fullWidth
           id="password"
@@ -106,6 +115,7 @@ const Register = () => {
           error={passwordErrText !== ""}
           disabled={loading}
         />
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <TextField
           fullWidth
           id="confirmPassword"
@@ -118,6 +128,7 @@ const Register = () => {
           error={confirmErrText !== ""}
           disabled={loading}
         />
+        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <LoadingButton
           sx={{ mt: 3, mb: 2 }}
           fullWidth
@@ -129,6 +140,7 @@ const Register = () => {
           アカウント作成
         </LoadingButton>
       </Box>
+      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Button component={Link} to="/login">
         既にアカウントを持っていますか？ログイン
       </Button>
