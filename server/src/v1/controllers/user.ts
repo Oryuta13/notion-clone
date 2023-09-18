@@ -1,17 +1,23 @@
+// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'JWT'.
 const JWT = require("jsonwebtoken");
+// @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const CryptoJS = require("crypto-js");
+// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'User'.
 const User = require("../models/user");
 
-exports.register = async (req, res) => {
+// @ts-expect-error TS(2304): Cannot find name 'exports'.
+exports.register = async (req: any, res: any) => {
   // パスワードを受け取る
   const password = req.body.password;
 
   try {
     // パスワードの暗号化
+    // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
     req.body.password = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY);
     // ユーザーの新規作成
     const user = await User.create(req.body);
     // JWTの発行
+    // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
     const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
       expiresIn: "24h",
     });
@@ -22,7 +28,8 @@ exports.register = async (req, res) => {
 };
 
 // ユーザーログイン用API
-exports.login = async (req, res) => {
+// @ts-expect-error TS(2304): Cannot find name 'exports'.
+exports.login = async (req: any, res: any) => {
   const { username, password } = req.body;
 
   try {
@@ -43,6 +50,7 @@ exports.login = async (req, res) => {
     // DBのパスワードを復号化する
     const descryptedPassword = CryptoJS.AES.decrypt(
       user.password,
+      // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
       process.env.SECRET_KEY
     ).toString(CryptoJS.enc.Utf8);
 
@@ -59,6 +67,7 @@ exports.login = async (req, res) => {
     }
 
     // JWTを発行
+    // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
     const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
       expiresIn: "24h",
     });

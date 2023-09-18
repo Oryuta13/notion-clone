@@ -1,6 +1,8 @@
+// @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const Memo = require("../models/memo");
 
-exports.create = async (req, res) => {
+// @ts-expect-error TS(2304): Cannot find name 'exports'.
+exports.create = async (req: any, res: any) => {
   try {
     // メモの個数をカウントする
     const memoCount = await Memo.find().count();
@@ -11,20 +13,24 @@ exports.create = async (req, res) => {
     });
     res.status(201).json(memo);
   } catch {
+    // @ts-expect-error TS(2304): Cannot find name 'err'.
     res.status(500).json(err);
   }
 };
 
-exports.getAll = async (req, res) => {
+// @ts-expect-error TS(2304): Cannot find name 'exports'.
+exports.getAll = async (req: any, res: any) => {
   try {
     const memos = await Memo.find({ user: req.user._id }).sort("-position");
     res.status(200).json(memos);
   } catch {
+    // @ts-expect-error TS(2304): Cannot find name 'err'.
     res.status(500).json(err);
   }
 };
 
-exports.getOne = async (req, res) => {
+// @ts-expect-error TS(2304): Cannot find name 'exports'.
+exports.getOne = async (req: any, res: any) => {
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
@@ -35,7 +41,8 @@ exports.getOne = async (req, res) => {
   }
 };
 
-exports.update = async (req, res) => {
+// @ts-expect-error TS(2304): Cannot find name 'exports'.
+exports.update = async (req: any, res: any) => {
   const { memoId } = req.params;
   const { title, description } = req.body;
 
@@ -57,7 +64,8 @@ exports.update = async (req, res) => {
   }
 };
 
-exports.delete = async (req, res) => {
+// @ts-expect-error TS(2304): Cannot find name 'exports'.
+exports.delete = async (req: any, res: any) => {
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
