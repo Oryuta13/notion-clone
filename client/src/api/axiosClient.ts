@@ -7,7 +7,7 @@ const axiosClient = axios.create({
   baseURL: BASE_URL,
 });
 
-// APIを叩く前に前処理を行う？？要検討。。
+// APIを叩く前に前処理を行う
 // @ts-expect-error TS(2345): Argument of type '(config: InternalAxiosRequestCon... Remove this comment to see the full error message
 axiosClient.interceptors.request.use(async (config) => {
   return {
