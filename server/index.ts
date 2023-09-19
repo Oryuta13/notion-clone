@@ -9,6 +9,8 @@ require("dotenv").config();
 // @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const cors = require("cors");
 
+// @types/cors install
+
 app.use(
   cors({
     origin: "http://localhost:3000",
