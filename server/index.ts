@@ -4,7 +4,7 @@ const app = express();
 const PORT = 8000;
 import dotenv from "dotenv";
 import cors from "cors";
-import apiRoutes from "./src/v1/routes";
+import apiRoutes from "./src/v1/routes/";
 dotenv.config();
 
 // corsの設定

@@ -1,24 +1,21 @@
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'JWT'.
-const JWT = require("jsonwebtoken");
-// @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
-const CryptoJS = require("crypto-js");
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'User'.
-const User = require("../models/user");
+import JWT from "jsonwebtoken";
+import CryptoJS from "crypto-js";
+import User from "../models/user";
 
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.register = async (req: any, res: any) => {
+export const register = async (req: any, res: any) => {
   // パスワードを受け取る
   const password = req.body.password;
 
   try {
+    // SECRET_KEYが存在しない場合のデフォルト値を指定する
+    const secretKey: string = process.env.SECRET_KEY || "default-secret-key";
+
     // パスワードの暗号化
-    // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
-    req.body.password = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY);
+    req.body.password = CryptoJS.AES.encrypt(password, secretKey);
     // ユーザーの新規作成
     const user = await User.create(req.body);
     // JWTの発行
-    // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
-    const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
+    const token = JWT.sign({ id: user._id }, secretKey, {
       expiresIn: "24h",
     });
     return res.status(200).json({ user, token });
@@ -28,8 +25,7 @@ exports.register = async (req: any, res: any) => {
 };
 
 // ユーザーログイン用API
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.login = async (req: any, res: any) => {
+export const login = async (req: any, res: any) => {
   const { username, password } = req.body;
 
   try {
@@ -46,12 +42,14 @@ exports.login = async (req: any, res: any) => {
       });
     }
 
+    // SECRET_KEYが存在しない場合のデフォルト値を指定する
+    const secretKey: string = process.env.SECRET_KEY || "default-secret-key";
+
     // パスワードが合っているか照合する
     // DBのパスワードを復号化する
     const descryptedPassword = CryptoJS.AES.decrypt(
       user.password,
-      // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
-      process.env.SECRET_KEY
+      secretKey
     ).toString(CryptoJS.enc.Utf8);
 
     // 復号化したパスワードが一致するかチェック
@@ -67,8 +65,7 @@ exports.login = async (req: any, res: any) => {
     }
 
     // JWTを発行
-    // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
-    const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
+    const token = JWT.sign({ id: user._id }, secretKey, {
       expiresIn: "24h",
     });
 

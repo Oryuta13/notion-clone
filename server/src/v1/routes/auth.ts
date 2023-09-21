@@ -1,19 +1,13 @@
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'router'.
-const router = require("express").Router();
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'validation... Remove this comment to see the full error message
-const { body, validationResult } = require("express-validator");
+import { Router } from "express";
+import { body, validationResult } from "express-validator";
+import dotenv from "dotenv";
+import User from "../models/user";
+import * as validation from "../handlers/validation";
+import * as userController from "../controllers/user";
+import * as tokenHandler from "../handlers/tokenHandler";
 
-// @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
-require("dotenv").config();
-
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'User'.
-const User = require("../models/user");
-// @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
-const validation = require("../handlers/validation");
-// @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
-const userController = require("../controllers/user");
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'tokenHandl... Remove this comment to see the full error message
-const tokenHandler = require("../handlers/tokenHandler");
+const router = Router();
+dotenv.config();
 
 // ユーザー新規登録API
 router.post(
@@ -57,5 +51,4 @@ router.post("/verify-token", tokenHandler.verifyToken, (req: any, res: any) => {
   return res.status(200).json({ user: req.user });
 });
 
-// @ts-expect-error TS(2580): Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
-module.exports = router;
+export default router;

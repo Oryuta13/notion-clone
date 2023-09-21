@@ -1,8 +1,6 @@
-// @ts-expect-error TS(2580): Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
-const Memo = require("../models/memo");
+import Memo from "../models/memo";
 
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.create = async (req: any, res: any) => {
+export const create = async (req: any, res: any) => {
   try {
     // メモの個数をカウントする
     const memoCount = await Memo.find().count();
@@ -12,25 +10,21 @@ exports.create = async (req: any, res: any) => {
       position: memoCount > 0 ? memoCount : 0,
     });
     res.status(201).json(memo);
-  } catch {
-    // @ts-expect-error TS(2304): Cannot find name 'err'.
+  } catch (err) {
     res.status(500).json(err);
   }
 };
 
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.getAll = async (req: any, res: any) => {
+export const getAll = async (req: any, res: any) => {
   try {
     const memos = await Memo.find({ user: req.user._id }).sort("-position");
     res.status(200).json(memos);
-  } catch {
-    // @ts-expect-error TS(2304): Cannot find name 'err'.
+  } catch (err) {
     res.status(500).json(err);
   }
 };
 
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.getOne = async (req: any, res: any) => {
+export const getOne = async (req: any, res: any) => {
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
@@ -41,8 +35,7 @@ exports.getOne = async (req: any, res: any) => {
   }
 };
 
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.update = async (req: any, res: any) => {
+export const update = async (req: any, res: any) => {
   const { memoId } = req.params;
   const { title, description } = req.body;
 
@@ -64,8 +57,7 @@ exports.update = async (req: any, res: any) => {
   }
 };
 
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.delete = async (req: any, res: any) => {
+export const deleteMemo = async (req: any, res: any) => {
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });

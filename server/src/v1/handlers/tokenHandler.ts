@@ -1,7 +1,5 @@
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'JWT'.
-const JWT = require("jsonwebtoken");
-// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'User'.
-const User = require("../models/user");
+import JWT, { Secret } from "jsonwebtoken";
+import User from "../models/user";
 
 // クライアントから渡されたJWTが正常か検証する
 const tokenDecode = (req: any) => {
@@ -11,9 +9,15 @@ const tokenDecode = (req: any) => {
     // ベアラだけを取得
     const bearer = bearerHeader.split(" ")[1];
     try {
+      // 環境変数から秘密鍵情報を取得
+      const secretKey: Secret | undefined = process.env.TOKEN_SECRET_KEY;
+      if (!secretKey) {
+        // もし環境変数が未設定またはundefinedならエラーを返す
+        return false;
+      }
+
       // ベアラと秘密鍵情報を用いてJWTの検証と読み取りをする
-      // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
-      const decodedToken = JWT.verify(bearer, process.env.TOKEN_SECRET_KEY);
+      const decodedToken: any = JWT.verify(bearer, secretKey);
       return decodedToken;
       // ベアラと秘密鍵が正しくない場合はfalseを返す、権限がない判定にする
     } catch {
@@ -25,8 +29,7 @@ const tokenDecode = (req: any) => {
 };
 
 // JWT認証を検証するためのミドルウェア
-// @ts-expect-error TS(2304): Cannot find name 'exports'.
-exports.verifyToken = async (req: any, res: any, next: any) => {
+export const verifyToken = async (req: any, res: any, next: any) => {
   const tokenDecoded = tokenDecode(req);
   // デコードしたトークンが存在すれば、そのトークンと一致するユーザーを探してくる
   if (tokenDecoded) {
