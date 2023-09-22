@@ -1,8 +1,9 @@
 import authApi from "../api/authApi";
+import { AxiosResponse } from "axios";
 
 const authUtils = {
   // JWTチェック
-  isAuthenticated: async () => {
+  isAuthenticated: async (): Promise<boolean | undefined> => {
     // Userが持っているJWTを取得
     const token = localStorage.getItem("token");
     // UserにJWTが付加されていなければリターン
@@ -10,9 +11,8 @@ const authUtils = {
 
     // JWTが付加されていた場合User情報を返す
     try {
-      const res = await authApi.verifyToken();
-      // @ts-expect-error TS(2339): Property 'user' does not exist on type 'AxiosRespo... Remove this comment to see the full error message
-      return res.user;
+      const res: AxiosResponse = await authApi.verifyToken();
+      return res.data.user;
     } catch {
       return false;
     }
