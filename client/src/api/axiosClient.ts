@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 const BASE_URL = "http://localhost:8000/api/v1";
+
 const getToken = () => localStorage.getItem("token");
 
 const axiosClient = axios.create({
@@ -8,8 +9,7 @@ const axiosClient = axios.create({
 });
 
 // APIを叩く前に前処理を行う
-// @ts-expect-error TS(2345): Argument of type '(config: InternalAxiosRequestCon... Remove this comment to see the full error message
-axiosClient.interceptors.request.use(async (config) => {
+axiosClient.interceptors.request.use(async (config: any) => {
   return {
     ...config,
     headers: {
@@ -20,10 +20,10 @@ axiosClient.interceptors.request.use(async (config) => {
 });
 
 axiosClient.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse) => {
     return response.data;
   },
-  (err) => {
+  (err: AxiosError) => {
     throw err.response;
   }
 );

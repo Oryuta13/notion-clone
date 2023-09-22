@@ -1,31 +1,29 @@
 import { Box, Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { LoadingButton } from "@mui/lab";
 import { Link, useNavigate } from "react-router-dom";
 import authApi from "../api/authApi";
 
-const Register = () => {
+const Register: React.FC = () => {
   const navigate = useNavigate();
 
-  const [usernameErrText, setUsernameErrText] = useState("");
-  const [passwordErrText, setPasswordErrText] = useState("");
-  const [confirmErrText, setConfirmErrText] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [usernameErrText, setUsernameErrText] = useState<string>("");
+  const [passwordErrText, setPasswordErrText] = useState<string>("");
+  const [confirmErrText, setConfirmErrText] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUsernameErrText("");
     setPasswordErrText("");
     setConfirmErrText("");
 
     // 入力欄の文字列を取得
-    const data = new FormData(e.target);
-    // @ts-expect-error TS(2531): Object is possibly 'null'.
-    const username = data.get("username").trim();
-    // @ts-expect-error TS(2531): Object is possibly 'null'.
-    const password = data.get("password").trim();
-    // @ts-expect-error TS(2531): Object is possibly 'null'.
-    const confirmPassword = data.get("confirmPassword").trim();
+    const data = new FormData(e.currentTarget);
+    const username = data.get("username")?.toString().trim() || "";
+    const password = data.get("password")?.toString().trim() || "";
+    const confirmPassword =
+      data.get("confirmPassword")?.toString().trim() || "";
     console.log(username);
     console.log(password);
     console.log(confirmPassword);
@@ -62,13 +60,12 @@ const Register = () => {
         confirmPassword,
       });
       setLoading(false);
-      // @ts-expect-error TS(2339): Property 'token' does not exist on type 'AxiosResp... Remove this comment to see the full error message
-      localStorage.setItem("token", res.token);
+      // res.dataからtokenを取得
+      localStorage.setItem("token", res.data.token);
       console.log("新規登録に成功しました");
       navigate("/");
-    } catch (err) {
-      // @ts-expect-error TS(2571): Object is of type 'unknown'.
-      const errors = err.data.errors;
+    } catch (err: any) {
+      const errors = err.response.data.errors;
       console.log(errors);
       errors.forEach((err: any) => {
         if (err.path === "username") {
@@ -86,15 +83,8 @@ const Register = () => {
   };
 
   return (
-    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <>
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Box component="form" onSubmit={handleSubmit} noValidate>
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <TextField
           fullWidth
           id="username"
@@ -106,9 +96,6 @@ const Register = () => {
           error={usernameErrText !== ""}
           disabled={loading}
         />
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <TextField
           fullWidth
           id="password"
@@ -121,9 +108,6 @@ const Register = () => {
           error={passwordErrText !== ""}
           disabled={loading}
         />
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <TextField
           fullWidth
           id="confirmPassword"
@@ -136,9 +120,6 @@ const Register = () => {
           error={confirmErrText !== ""}
           disabled={loading}
         />
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <LoadingButton
           sx={{ mt: 3, mb: 2 }}
           fullWidth
@@ -150,9 +131,6 @@ const Register = () => {
           アカウント作成
         </LoadingButton>
       </Box>
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Button component={Link} to="/login">
         既にアカウントを持っていますか？ログイン
       </Button>

@@ -15,15 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import memoApi from "../../api/memoApi";
 import { setMemo } from "../../redux/features/memoSlice";
 
-const Sidebar = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+const Sidebar: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { memoId } = useParams();
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const user = useSelector((state) => state.user.value);
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const memos = useSelector((state) => state.memo.value);
+  const { memoId } = useParams<{ memoId: string }>();
+  const user = useSelector((state: any) => state.user.value);
+  const memos = useSelector((state: any) => state.memo.value);
 
   // ログアウトボタンが押されたら、ローカルストレージからJWTを削除しログインページにリダイレクトする
   const logout = () => {
@@ -46,7 +44,7 @@ const Sidebar = () => {
   useEffect(() => {
     const activeIndex = memos.findIndex((e: any) => e._id === memoId);
     setActiveIndex(activeIndex);
-  }, [navigate]);
+  }, [navigate, memoId, memos]);
 
   const addMemo = async () => {
     try {
@@ -54,24 +52,19 @@ const Sidebar = () => {
       const newMemos = [res, ...memos];
       dispatch(setMemo(newMemos));
       // 作成したメモにリダイレクト
-      // @ts-expect-error TS(2339): Property '_id' does not exist on type 'AxiosRespon... Remove this comment to see the full error message
-      navigate(`memo/${res._id}`);
+      navigate(`memo/${res.data._id}`);
     } catch (err) {
       alert(err);
     }
   };
 
   return (
-    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Drawer
       container={window.document.body}
       variant="permanent"
       open={true}
       sx={{ width: 250, height: "100vh" }}
     >
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <List
         sx={{
           width: 250,
@@ -79,13 +72,7 @@ const Sidebar = () => {
           backgroundColor: assets.colors.secondary,
         }}
       >
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <ListItemButton>
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <Box
             sx={{
               width: "100%",
@@ -94,34 +81,16 @@ const Sidebar = () => {
               justifyContent: "space-between",
             }}
           >
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <Typography variant="body2" fontWeight="700">
               {user.username}
             </Typography>
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <IconButton onClick={logout}>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               <LogoutOutlinedIcon />
             </IconButton>
           </Box>
         </ListItemButton>
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Box sx={{ paddingTop: "10px" }}></Box>
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <ListItemButton>
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <Box
             sx={{
               width: "100%",
@@ -130,25 +99,15 @@ const Sidebar = () => {
               justifyContent: "space-between",
             }}
           >
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <Typography variant="body2" fontWeight="700">
               Memo
             </Typography>
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <IconButton onClick={() => addMemo()}>
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-              // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               <AddBoxOutlinedIcon fontSize="small" />
             </IconButton>
           </Box>
         </ListItemButton>
-        {memos.map((item: any, index: any) => (
-          // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+        {memos.map((item: any, index: number) => (
           <ListItemButton
             sx={{ pl: "20px" }}
             component={Link}
@@ -156,9 +115,6 @@ const Sidebar = () => {
             key={item._id}
             selected={index === activeIndex}
           >
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <Typography>
               {item.icon} {item.title}
             </Typography>

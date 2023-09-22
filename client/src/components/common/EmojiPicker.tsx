@@ -2,9 +2,15 @@ import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Picker from "@emoji-mart/react";
 
-const EmojiPicker = (props: any) => {
-  const [selectedEmoji, setSelectedEmoji] = useState();
-  const [isShowPicker, setIsShowPicker] = useState(false);
+// propsの型情報を定義
+interface EmojiPickerProps {
+  icon: string;
+  onChange: (emoji: string) => void;
+}
+
+const EmojiPicker: React.FC<EmojiPickerProps> = (props) => {
+  const [selectedEmoji, setSelectedEmoji] = useState<string>();
+  const [isShowPicker, setIsShowPicker] = useState<boolean>(false);
 
   // アイコンが変更されるたびに選択された絵文字を更新する
   useEffect(() => {
@@ -27,11 +33,7 @@ const EmojiPicker = (props: any) => {
   };
 
   return (
-    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Box>
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Typography
         variant="h3"
         fontWeight="700"
@@ -41,9 +43,6 @@ const EmojiPicker = (props: any) => {
         {selectedEmoji}
       </Typography>
       {/* isShowPickerがtrueならブロック要素、falseならnone */}
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-      // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Box
         sx={{
           display: isShowPicker ? "block" : "none",
@@ -51,9 +50,6 @@ const EmojiPicker = (props: any) => {
           zIndex: "100",
         }}
       >
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Picker onEmojiSelect={selectEmoji} />
       </Box>
     </Box>
