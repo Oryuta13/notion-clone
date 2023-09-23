@@ -1,8 +1,9 @@
 import JWT, { Secret } from "jsonwebtoken";
 import User from "../models/user";
+import { Request, Response, NextFunction } from "express";
 
 // クライアントから渡されたJWTが正常か検証する
-const tokenDecode = (req: any) => {
+const tokenDecode = (req: Request) => {
   // リクエストヘッダーからauthorizationフィールドを指定してベアラトークンを取得
   const bearerHeader = req.headers["authorization"];
   if (bearerHeader) {
@@ -17,7 +18,7 @@ const tokenDecode = (req: any) => {
       }
 
       // ベアラと秘密鍵情報を用いてJWTの検証と読み取りをする
-      const decodedToken: any = JWT.verify(bearer, secretKey);
+      const decodedToken = JWT.verify(bearer, secretKey);
       return decodedToken;
       // ベアラと秘密鍵が正しくない場合はfalseを返す、権限がない判定にする
     } catch {
@@ -29,14 +30,21 @@ const tokenDecode = (req: any) => {
 };
 
 // JWT認証を検証するためのミドルウェア
-export const verifyToken = async (req: any, res: any, next: any) => {
+export const verifyToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const tokenDecoded = tokenDecode(req);
   // デコードしたトークンが存在すれば、そのトークンと一致するユーザーを探してくる
   if (tokenDecoded) {
-    const user = await User.findById(tokenDecoded.id);
+    const user = await User.findById((tokenDecoded as any).id);
+    // ユーザーが存在しない場合
     if (!user) {
       return res.status(401).json("権限がありません");
     }
+
+    // リクエスト情報を取得したユーザーで上書き
     req.user = user;
     next();
   } else {
