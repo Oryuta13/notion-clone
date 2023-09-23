@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import authUtils from "../../utils/authUtils";
 import notionLogo from "../../assets/images/notion-logo.png";
 
-const AuthLayout: React.FC = () => {
+const AuthLayout = () => {
   const navigate = useNavigate();
 
   // ページ遷移するごとに発火する
