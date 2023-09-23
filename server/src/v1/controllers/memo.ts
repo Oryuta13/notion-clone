@@ -1,6 +1,7 @@
 import Memo from "../models/memo";
+import { Request, Response } from "express";
 
-export const create = async (req: any, res: any) => {
+export const create = async (req: Request, res: Response) => {
   try {
     // メモの個数をカウントする
     const memoCount = await Memo.find().count();
@@ -15,7 +16,7 @@ export const create = async (req: any, res: any) => {
   }
 };
 
-export const getAll = async (req: any, res: any) => {
+export const getAll = async (req: Request, res: Response) => {
   try {
     const memos = await Memo.find({ user: req.user._id }).sort("-position");
     res.status(200).json(memos);
@@ -24,7 +25,7 @@ export const getAll = async (req: any, res: any) => {
   }
 };
 
-export const getOne = async (req: any, res: any) => {
+export const getOne = async (req: Request, res: Response) => {
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
@@ -35,7 +36,7 @@ export const getOne = async (req: any, res: any) => {
   }
 };
 
-export const update = async (req: any, res: any) => {
+export const update = async (req: Request, res: Response) => {
   const { memoId } = req.params;
   const { title, description } = req.body;
 
@@ -57,7 +58,7 @@ export const update = async (req: any, res: any) => {
   }
 };
 
-export const deleteMemo = async (req: any, res: any) => {
+export const deleteMemo = async (req: Request, res: Response) => {
   const { memoId } = req.params;
   try {
     const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
