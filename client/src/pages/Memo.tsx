@@ -7,11 +7,9 @@ import memoApi from "../api/memoApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setMemo } from "../redux/features/memoSlice";
 import EmojiPicker from "../components/common/EmojiPicker";
+import { RootState } from "../redux/store";
 
-// reactコンポーネントのpropsの型情報を定義するために空のインターフェースを定義
-interface MemoProps {}
-
-const Memo: React.FC<MemoProps> = () => {
+const Memo = () => {
   // memoIdを取得してくる
   const { memoId } = useParams<{ memoId: string }>();
   const [title, setTitle] = useState<string>("");
@@ -19,7 +17,7 @@ const Memo: React.FC<MemoProps> = () => {
   const [icon, setIcon] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const memos = useSelector((state: any) => state.memo.value);
+  const memos = useSelector((state: RootState) => state.memo.value);
 
   // memoIdが変更されるたびにそのメモを取得する
   useEffect(() => {
@@ -94,7 +92,9 @@ const Memo: React.FC<MemoProps> = () => {
 
   const onIconChange = async (newIcon: string) => {
     let temp = [...memos];
+    // 詳細ページで該当のメモのindexを取得
     const index = temp.findIndex((e) => e._id === memoId);
+    // アイコンのみ引数で受け取ったアイコンに更新
     temp[index] = { ...temp[index], icon: newIcon };
     setIcon(newIcon);
     // tempした現在のメモの状態をsetMemoで状態を更新する

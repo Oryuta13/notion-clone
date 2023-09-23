@@ -4,7 +4,7 @@ import { LoadingButton } from "@mui/lab";
 import { Link, useNavigate } from "react-router-dom";
 import authApi from "../api/authApi";
 
-const Login: React.FC = () => {
+const Login = () => {
   const navigate = useNavigate();
 
   const [usernameErrText, setUsernameErrText] = useState<string>("");
@@ -17,14 +17,14 @@ const Login: React.FC = () => {
     setPasswordErrText("");
 
     // 入力欄の文字列を取得
-    const data = new FormData(e.currentTarget);
-    const username = data.get("username")?.toString().trim() || "";
-    const password = data.get("password")?.toString().trim() || "";
+    const data = new FormData(e.target as HTMLFormElement);
+    const username = data.get("username")?.toString().trim() as string;
+    const password = data.get("password")?.toString().trim() as string;
     console.log(username);
     console.log(password);
 
+    // バリデーションチェック
     let error = false;
-
     if (username === "") {
       error = true;
       setUsernameErrText("名前を入力してください");
@@ -46,8 +46,10 @@ const Login: React.FC = () => {
         password,
       });
       setLoading(false);
+      // ローカルストレージにトークンを保存
       localStorage.setItem("token", res.data.token);
       console.log("ログインに成功しました");
+
       navigate("/");
     } catch (err: any) {
       const errors = err.data.errors;
