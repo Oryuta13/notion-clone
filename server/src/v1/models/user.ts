@@ -1,7 +1,6 @@
-// ユーザースキーマを構築、モデルの作成
-
 import mongoose from "mongoose";
 
+// ユーザースキーマを構築、モデルの作成
 const userSchema = new mongoose.Schema({
   username: {
     type: String,

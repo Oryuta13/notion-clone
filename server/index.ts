@@ -1,11 +1,13 @@
-import express from "express";
+import express, { Application } from "express";
 import mongoose from "mongoose";
-const app = express();
-const PORT = 8000;
 import dotenv from "dotenv";
 import cors from "cors";
 import apiRoutes from "./src/v1/routes/";
+
 dotenv.config();
+
+const app: Application = express();
+const PORT: number = 8000;
 
 // corsの設定
 app.use(
@@ -23,7 +25,11 @@ app.use("/api/v1", apiRoutes);
 // DB接続
 try {
   // DBの設定ファイルから接続情報を取得
-  const MONGODB_URL: any = process.env.MONGODB_URL;
+  const MONGODB_URL: string | undefined = process.env.MONGODB_URL;
+
+  if (!MONGODB_URL) {
+    throw new Error("MONGODB_URLが設定されていません。");
+  }
 
   // DBに接続する
   mongoose.connect(MONGODB_URL);
