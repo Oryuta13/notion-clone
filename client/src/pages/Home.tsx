@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import memoApi from "../api/memoApi";
 
-const Home: React.FC = () => {
+const Home = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
