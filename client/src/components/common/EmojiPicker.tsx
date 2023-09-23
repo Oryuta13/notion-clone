@@ -8,28 +8,32 @@ interface EmojiPickerProps {
   onChange: (emoji: string) => void;
 }
 
-const EmojiPicker: React.FC<EmojiPickerProps> = (props) => {
+const EmojiPicker = ({ icon, onChange }: EmojiPickerProps) => {
   const [selectedEmoji, setSelectedEmoji] = useState<string>();
   const [isShowPicker, setIsShowPicker] = useState<boolean>(false);
 
   // アイコンが変更されるたびに選択された絵文字を更新する
   useEffect(() => {
-    setSelectedEmoji(props.icon);
-  }, [props.icon]);
+    setSelectedEmoji(icon);
+  }, [icon]);
 
   // クリックされるたびtrueとfalseを切り替える
   const showPicker = () => setIsShowPicker(!isShowPicker);
 
-  const selectEmoji = (e: any) => {
+  const selectEmoji = (e: { unified: string }) => {
+    // 絵文字コードを取得
     const emojiCode = e.unified.split("-");
     console.log(emojiCode);
+
     let codesArray: any = [];
-    emojiCode.forEach((el: any) => codesArray.push("0x" + el));
+    emojiCode.forEach((el: string) => codesArray.push("0x" + el));
+    // 文字コードの配列を文字列に変換
     const emoji = String.fromCodePoint(...codesArray);
     console.log(emoji);
     // 絵文字を選択したらpickerを閉じる
     setIsShowPicker(false);
-    props.onChange(emoji);
+    // 絵文字の文字コードを関数に渡す
+    onChange(emoji);
   };
 
   return (

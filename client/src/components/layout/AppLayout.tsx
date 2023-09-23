@@ -6,10 +6,11 @@ import Sidebar from "../common/Sidebar";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/features/userSlice";
 
-const AppLayout: React.FC = () => {
+const AppLayout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // ページ遷移するごとに発火
   useEffect(() => {
     // JWTを持っているのか確認する
     const checkAuth = async () => {

@@ -9,19 +9,22 @@ import { Box } from "@mui/system";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import React, { useEffect, useState } from "react";
+import { RootState } from "../../redux/store";
 import assets from "../../assets/index";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import memoApi from "../../api/memoApi";
 import { setMemo } from "../../redux/features/memoSlice";
+import { Memo } from "../../@types/Memo";
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // URLのIDを取得
   const { memoId } = useParams<{ memoId: string }>();
-  const user = useSelector((state: any) => state.user.value);
-  const memos = useSelector((state: any) => state.memo.value);
+  const user = useSelector((state: RootState) => state.user.value);
+  const memos = useSelector((state: RootState) => state.memo.value);
 
   // ログアウトボタンが押されたら、ローカルストレージからJWTを削除しログインページにリダイレクトする
   const logout = () => {
@@ -42,14 +45,14 @@ const Sidebar: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const activeIndex = memos.findIndex((e: any) => e._id === memoId);
+    const activeIndex = memos.findIndex((memo: Memo) => memo._id === memoId);
     setActiveIndex(activeIndex);
   }, [navigate, memoId, memos]);
 
   const addMemo = async () => {
     try {
       const res = await memoApi.create();
-      const newMemos = [res, ...memos];
+      const newMemos = [res.data, ...memos];
       dispatch(setMemo(newMemos));
       // 作成したメモにリダイレクト
       navigate(`memo/${res.data._id}`);
@@ -107,7 +110,7 @@ const Sidebar: React.FC = () => {
             </IconButton>
           </Box>
         </ListItemButton>
-        {memos.map((item: any, index: number) => (
+        {memos.map((item: Memo, index: number) => (
           <ListItemButton
             sx={{ pl: "20px" }}
             component={Link}
