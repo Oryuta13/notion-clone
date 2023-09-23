@@ -10,7 +10,7 @@ import AppLayout from "./components/layout/AppLayout";
 import Home from "./pages/Home";
 import Memo from "./pages/Memo";
 
-const App: React.FC = () => {
+const App = () => {
   const theme = createTheme({
     palette: { primary: blue },
   });
