@@ -61,20 +61,16 @@ const Login = () => {
       navigate("/");
     } catch (err: any) {
       setLoading(false);
-      if (err.data && err.data.errors) {
-        const errors = err.data.errors;
-        console.log(errors);
-        errors.forEach((error: any) => {
-          if (err.path === "username") {
-            setUsernameErrText(error.msg);
-          }
-          if (err.path === "password") {
-            setPasswordErrText(error.msg);
-          }
-        });
-      } else {
-        console.error(err);
-      }
+      const errors = err.data.errors;
+      console.log(errors);
+      errors.forEach((err: any) => {
+        if (err.path === "username") {
+          setUsernameErrText(err.msg);
+        }
+        if (err.path === "password") {
+          setPasswordErrText(err.msg);
+        }
+      });
     }
   };
 
