@@ -3,9 +3,12 @@ import React, { useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import { Link, useNavigate } from "react-router-dom";
 import authApi from "../api/authApi";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/features/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [usernameErrText, setUsernameErrText] = useState<string>("");
   const [passwordErrText, setPasswordErrText] = useState<string>("");
@@ -41,28 +44,37 @@ const Login = () => {
 
     // ログインAPIを叩く
     try {
-      const res = await authApi.login({
+      const res: any = await authApi.login({
         username,
         password,
       });
+      console.log(res);
+      // ログイン成功後にユーザー情報をreduxのステートに保存
+      dispatch(setUser({ username: res.data.user.username }));
+
+      console.log(res);
       setLoading(false);
       // ローカルストレージにトークンを保存
       localStorage.setItem("token", res.data.token);
       console.log("ログインに成功しました");
-
+      console.log("リダイレクトします...");
       navigate("/");
     } catch (err: any) {
-      const errors = err.data.errors;
-      console.log(errors);
-      errors.forEach((err: any) => {
-        if (err.path === "username") {
-          setUsernameErrText(err.msg);
-        }
-        if (err.path === "password") {
-          setPasswordErrText(err.msg);
-        }
-      });
       setLoading(false);
+      if (err.data && err.data.errors) {
+        const errors = err.data.errors;
+        console.log(errors);
+        errors.forEach((error: any) => {
+          if (err.path === "username") {
+            setUsernameErrText(error.msg);
+          }
+          if (err.path === "password") {
+            setPasswordErrText(error.msg);
+          }
+        });
+      } else {
+        console.error(err);
+      }
     }
   };
 

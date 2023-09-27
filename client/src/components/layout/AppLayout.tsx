@@ -15,13 +15,14 @@ const AppLayout = () => {
     // JWTを持っているのか確認する
     const checkAuth = async () => {
       // 認証チェック
-      const user = await authUtils.isAuthenticated();
-      if (!user) {
+      const response = await authUtils.isAuthenticated();
+      console.log(response?.user);
+      if (!response?.user) {
         // userが存在しなければログインにリダイレクト
         navigate("/login");
       } else {
         // ユーザーを保存する
-        dispatch(setUser(user));
+        dispatch(setUser(response.user));
       }
     };
     checkAuth();

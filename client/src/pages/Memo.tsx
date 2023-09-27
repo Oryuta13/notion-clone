@@ -8,27 +8,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMemo } from "../redux/features/memoSlice";
 import EmojiPicker from "../components/common/EmojiPicker";
 import { RootState } from "../redux/store";
+import { Memo } from "../@types/Memo";
 
-const Memo = () => {
+const MemoPage = () => {
   // memoIdを取得してくる
-  const { memoId } = useParams<{ memoId: string }>();
+  const { memoId } = useParams<{ memoId?: string }>();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [icon, setIcon] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const memos = useSelector((state: RootState) => state.memo.value);
+  const memos: Memo[] = useSelector((state: RootState) => state.memo.value);
 
   // memoIdが変更されるたびにそのメモを取得する
   useEffect(() => {
     const getMemo = async () => {
-      try {
-        const res = await memoApi.getOne(memoId);
-        setTitle(res.data.title);
-        setDescription(res.data.description);
-        setIcon(res.data.icon);
-      } catch (err) {
-        alert(err);
+      // memoIdがundefinedでないことを確認
+      if (memoId) {
+        try {
+          const res = await memoApi.getOne(memoId);
+          console.log(res);
+          setTitle(res.data.title);
+          setDescription(res.data.description);
+          setIcon(res.data.icon);
+        } catch (err) {
+          alert(err);
+        }
       }
     };
     getMemo();
@@ -49,6 +54,8 @@ const Memo = () => {
     setTitle(newTitle);
 
     timer = setTimeout(async () => {
+      // memoIdがundefinedでないことを確認
+      if (!memoId) return;
       try {
         await memoApi.update(memoId, { title: newTitle });
       } catch (err) {
@@ -67,6 +74,8 @@ const Memo = () => {
     setDescription(newDescription);
 
     timer = setTimeout(async () => {
+      // memoIdがundefinedでないことを確認
+      if (!memoId) return;
       try {
         await memoApi.update(memoId, { description: newDescription });
       } catch (err) {
@@ -76,9 +85,11 @@ const Memo = () => {
   };
 
   const deleteMemo = async () => {
+    // memoIdがundefinedでないことを確認
+    if (!memoId) return;
     try {
       await memoApi.delete(memoId);
-      const newMemos = memos.filter((e: any) => e._id !== memoId);
+      const newMemos = memos.filter((memo) => memo._id !== memoId);
       if (newMemos.length === 0) {
         navigate("/memo");
       } else {
@@ -91,6 +102,8 @@ const Memo = () => {
   };
 
   const onIconChange = async (newIcon: string) => {
+    // memoIdがundefinedでないことを確認
+    if (!memoId) return;
     let temp = [...memos];
     // 詳細ページで該当のメモのindexを取得
     const index = temp.findIndex((e) => e._id === memoId);
@@ -116,7 +129,7 @@ const Memo = () => {
           width: "100%",
         }}
       >
-        <IconButton variant="outlined" color="error" onClick={deleteMemo}>
+        <IconButton color="error" onClick={deleteMemo}>
           <DeleteOutlinedIcon />
         </IconButton>
       </Box>
@@ -153,4 +166,4 @@ const Memo = () => {
   );
 };
 
-export default Memo;
+export default MemoPage;

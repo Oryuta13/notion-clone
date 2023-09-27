@@ -56,32 +56,38 @@ const Register = () => {
 
     // 新規登録APIを叩く
     try {
-      const res = await authApi.register({
+      const res: any = await authApi.register({
         username,
         password,
         confirmPassword,
       });
+      console.log(res);
       setLoading(false);
       // res.dataからtokenを取得、ローカルストレージにトークンを保存
       localStorage.setItem("token", res.data.token);
       console.log("新規登録に成功しました");
-
+      console.log("リダイレクトします...");
       navigate("/");
     } catch (err: any) {
-      const errors = err.response.data.errors;
-      console.log(errors);
-      errors.forEach((err: any) => {
-        if (err.path === "username") {
-          setUsernameErrText(err.msg);
-        }
-        if (err.path === "password") {
-          setPasswordErrText(err.msg);
-        }
-        if (err.path === "confirmPassword") {
-          setConfirmErrText(err.msg);
-        }
-      });
       setLoading(false);
+      if (err.data && err.data.errors) {
+        const errors = err.data.errors;
+        console.log(errors);
+
+        errors.forEach((error: any) => {
+          if (err.path === "username") {
+            setUsernameErrText(error.msg);
+          }
+          if (err.path === "password") {
+            setPasswordErrText(error.msg);
+          }
+          if (err.path === "confirmPassword") {
+            setConfirmErrText(error.msg);
+          }
+        });
+      } else {
+        console.error(err);
+      }
     }
   };
 
