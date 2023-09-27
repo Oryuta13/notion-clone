@@ -21,16 +21,13 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthLayout />}>
-            <Route path="login" element={<Login />} />
-
-            <Route path="register" element={<Register />} />
+            <Route path="login" element={<Login />}></Route>
+            <Route path="register" element={<Register />}></Route>
           </Route>
 
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />} />
-
             <Route path="memo" element={<Home />} />
-
             <Route path="memo/:memoId" element={<Memo />} />
           </Route>
         </Routes>

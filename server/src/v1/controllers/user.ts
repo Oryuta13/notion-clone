@@ -70,7 +70,10 @@ export const login = async (req: Request, res: Response) => {
       expiresIn: "24h",
     });
 
-    return res.status(201).json({ user, token });
+    // ユーザー情報とトークンを返す
+    return res
+      .status(201)
+      .json({ user: { username: user.username, id: user._id }, token });
   } catch (err) {
     return res.status(500).json(err);
   }

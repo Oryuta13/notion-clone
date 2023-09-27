@@ -26,6 +26,10 @@ const Sidebar = () => {
   const user = useSelector((state: RootState) => state.user.value);
   const memos = useSelector((state: RootState) => state.memo.value);
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   // ログアウトボタンが押されたら、ローカルストレージからJWTを削除しログインページにリダイレクトする
   const logout = () => {
     localStorage.removeItem("token");
@@ -36,7 +40,7 @@ const Sidebar = () => {
     const getMemos = async () => {
       try {
         const res = await memoApi.getAll();
-        dispatch(setMemo(res));
+        dispatch(setMemo(res.data));
       } catch (err) {
         alert(err);
       }

@@ -2,6 +2,15 @@ import JWT, { Secret } from "jsonwebtoken";
 import User from "../models/user";
 import { Request, Response, NextFunction } from "express";
 
+// Requestに拡張でuser型を追加
+declare global {
+  namespace Express {
+    interface Request {
+      user: { id: string; username: string };
+    }
+  }
+}
+
 // クライアントから渡されたJWTが正常か検証する
 const tokenDecode = (req: Request) => {
   // リクエストヘッダーからauthorizationフィールドを指定してベアラトークンを取得
@@ -35,6 +44,7 @@ export const verifyToken = async (
   res: Response,
   next: NextFunction
 ) => {
+  // 復号したトークンを取得
   const tokenDecoded = tokenDecode(req);
   // デコードしたトークンが存在すれば、そのトークンと一致するユーザーを探してくる
   if (tokenDecoded) {
@@ -45,7 +55,7 @@ export const verifyToken = async (
     }
 
     // リクエスト情報を取得したユーザーで上書き
-    req.user = user;
+    req.user = { id: user._id.toString(), username: user.username };
     next();
   } else {
     return res.status(401).json("権限がありません");
