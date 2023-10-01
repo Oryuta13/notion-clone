@@ -57,7 +57,6 @@ const Login = () => {
       // ローカルストレージにトークンを保存
       localStorage.setItem("token", res.data.token);
       console.log("ログインに成功しました");
-      console.log("リダイレクトします...");
       navigate("/");
     } catch (err: any) {
       setLoading(false);

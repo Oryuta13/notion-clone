@@ -39,7 +39,7 @@ const MemoPage = () => {
     getMemo();
   }, [memoId]);
 
-  let timer: NodeJS.Timeout | null = null;
+  let timer: any;
   // 0.5秒
   const timeout = 500;
 
